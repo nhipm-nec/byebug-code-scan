@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 import { ScanPromptButtons } from "@/components/ScanPromptButtons";
 import { RepoSelector } from "@/components/RepoSelector";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Play } from "lucide-react";
+import { Loader2, Play, History } from "lucide-react";
 
 export default function ScanSetup() {
   const [prompt, setPrompt] = useState("");
@@ -53,7 +53,7 @@ export default function ScanSetup() {
         variant: "default",
       });
 
-      navigate('/scan-versions');
+      navigate(`/scan-versions?repo=${selectedRepo}`);
     } catch (error) {
       toast({
         title: "Scan Failed",
@@ -73,104 +73,81 @@ export default function ScanSetup() {
           subtitle="Advanced Bug & Vulnerability Scanner"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Setup Panel */}
-          <div className="lg:col-span-2 space-y-6">
-            <ScanPromptButtons onPromptSelect={handlePromptSelect} />
-
-            <Card className="card-modern animate-fade-in">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Play className="w-5 h-5" />
-                  Scan Configuration
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Custom Prompt (Optional)
-                  </label>
-                  <Textarea
-                    placeholder="Enter a custom scanning prompt or use one of the templates above..."
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    rows={4}
-                    className="resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Repository *
-                  </label>
-                  <RepoSelector
-                    selectedRepo={selectedRepo}
-                    onRepoSelect={setSelectedRepo}
-                  />
-                </div>
-
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || !selectedRepo}
-                  variant="primary"
-                  size="lg"
-                  className="w-full"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Starting Scan...
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4 mr-2" />
-                      Start Scan
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div></div>
+            <Button
+              variant="outline"
+              onClick={() => navigate('/repo-history')}
+              className="gap-2"
+            >
+              <History className="w-4 h-4" />
+              History
+            </Button>
           </div>
 
-          {/* Info Panel */}
-          <div className="space-y-6">
-            <Card className="card-modern animate-slide-up">
-              <CardHeader>
-                <CardTitle className="text-lg">Scan Features</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-success mt-2"></div>
-                  <div>
-                    <div className="font-medium">OWASP Vulnerabilities</div>
-                    <div className="text-muted-foreground">Detect top 10 security risks</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-warning mt-2"></div>
-                  <div>
-                    <div className="font-medium">Code Quality</div>
-                    <div className="text-muted-foreground">Find bugs and code smells</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
-                  <div>
-                    <div className="font-medium">Test Coverage</div>
-                    <div className="text-muted-foreground">Analyze test reliability</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <ScanPromptButtons onPromptSelect={handlePromptSelect} />
 
-            <Card className="card-modern">
-              <CardContent className="pt-6">
-                <div className="text-center text-sm text-muted-foreground">
-                  Scans typically take 2-5 minutes depending on repository size
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="card-modern animate-fade-in max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Play className="w-5 h-5" />
+                Scan Configuration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Custom Prompt (Optional)
+                </label>
+                <Textarea
+                  placeholder="Enter a custom scanning prompt or use one of the templates above..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  rows={4}
+                  className="resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Repository *
+                </label>
+                <RepoSelector
+                  selectedRepo={selectedRepo}
+                  onRepoSelect={setSelectedRepo}
+                />
+              </div>
+
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting || !selectedRepo}
+                variant="primary"
+                size="lg"
+                className="w-full"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Starting Scan...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Start Scan
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="card-modern max-w-2xl mx-auto">
+            <CardContent className="pt-6">
+              <div className="text-center text-sm text-muted-foreground">
+                Scans typically take 2-5 minutes depending on repository size
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

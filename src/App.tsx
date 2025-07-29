@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScanSetup from "./pages/ScanSetup";
 import ScanVersions from "./pages/ScanVersions";
 import BugList from "./pages/BugList";
+import RepoHistory from "./pages/RepoHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<ScanSetup />} />
           <Route path="/scan-versions" element={<ScanVersions />} />
+          <Route path="/repo-history" element={<RepoHistory />} />
           <Route path="/bugs/:versionId" element={<BugList />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
